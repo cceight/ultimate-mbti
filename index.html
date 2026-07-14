@@ -371,13 +371,11 @@ async function loadWordPool(){
     const newAdj = [];
     const newNoun = [];
     // 1行目はヘッダー(タイムスタンプ/形容詞/名詞)なのでスキップ、B列・C列を使用
-    for(let i=1;i<rows.length;i++){
+for(let i=1;i<rows.length;i++){
       const adj = (rows[i][1] || "").trim();
       const noun = (rows[i][2] || "").trim();
-      if(adj && noun){
-        newAdj.push(adj);
-        newNoun.push(noun);
-      }
+      if(adj) newAdj.push(adj);
+      if(noun) newNoun.push(noun);
     }
     if(newAdj.length > 0 && newNoun.length > 0){
       ADJ = newAdj;
