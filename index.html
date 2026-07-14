@@ -626,7 +626,7 @@ document.getElementById('btn-share').addEventListener('click', ()=>{
 document.getElementById('btn-share-bsky').addEventListener('click', ()=>{
   if(!window.__last) return;
   const {code, adj, noun} = window.__last;
-  const text = `深夜の性格診断で「${adj} ${noun}」(${code})が出ました。 ${SITE_URL}`;
+  const text = `可能性は1100万通り以上！本当のMBTI診断で「${adj} ${noun}」(${code})が出ました。 ${SITE_URL}`;
   const bskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text)}`;
   window.open(bskyUrl, '_blank', 'noopener');
 });
