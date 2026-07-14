@@ -36,7 +36,6 @@
       var(--bg-black);
     padding:24px;
   }
-  /* 木目とほこりの粒子演出 */
   .grain{
     position:fixed; inset:0; pointer-events:none; z-index:1;
     opacity:0.05;
@@ -65,7 +64,6 @@
   .screen.active{ display:block; animation: fadeIn .8s ease; }
   @keyframes fadeIn{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
 
-  /* ===== 扉画面 ===== */
   .door-wrap{ text-align:center; }
   .eyebrow{
     font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
@@ -131,7 +129,6 @@
   .btn:disabled:hover{ color:var(--brass); }
   .btn:disabled:hover::before{ transform:translateX(-101%); }
 
-  /* ===== ルーレット画面 ===== */
   .bar-panel{
     background:linear-gradient(180deg,var(--wood-light),var(--wood));
     border:1px solid var(--line);
@@ -193,7 +190,6 @@
     font-size:11px; color:var(--muted); letter-spacing:.1em; margin-top:16px;
   }
 
-  /* ===== 結果画面(背景・文字色を反転) ===== */
   .card{
     background:
       radial-gradient(ellipse at 50% 0%, rgba(120,90,30,0.12), transparent 55%),
@@ -328,13 +324,14 @@
 <script>
 /* ============ データ ============ */
 // デフォルト(スプレッドシート取得に失敗した場合のフォールバック)
-let ADJ = ["孤高な","憂鬱な","妖艶な","寡黙な","放浪の","酩酊の","深夜の","一匹狼の","気まぐれな","謎めいた","退廃的な","優雅な","無頼な","感傷的な","冷徹な","情熱的な","世捨て人の","夜更かしの","苦味走った","甘美な","破滅的な","陽気な","皮肉屋の","浮世離れした","一期一会の","名もなき","影のある","気高き","酔狂な","不器用な","自由奔放な","神出鬼没の"];
-let NOUN = ["夜霧","一杯のジン","灯火","密偵","吟遊詩人","梟","黒猫","常連客","バーテンダー","迷い酒","月光","氷塊","燻製香","流れ者","秘密結社員","蝶","亡霊","錬金術師","カウンターの隅","万年筆","古時計","蜃気楼","一輪の薔薇","深夜ラジオ","密造酒","賭博師","旅人","探偵","影法師","ジャズの調べ","迷宮","星屑"];
+let ADJ = ["最強の","素早い","究極の"];
+let NOUN = ["トンボ","タマムシ","ゲジゲジ"];
 
 // Googleスプレッドシート「フォームの回答 1」シートをCSVで取得(B列=形容詞, C列=名詞)
-// シートが複数タブに増えた場合は、対象タブを開いた時のURL末尾 #gid=XXXXX の数字を
-// 下記の gid= の値に置き換えてください(現状は唯一のタブなので gid=0 を指定しています)
-const WORDPOOL_CSV_URL = "https://docs.google.com/spreadsheets/d/1mgzikHSxEAivSlJLSyKNqhPov6lxJ3C78TdOpBKPSl4/export?format=csv&gid=0";
+// gid(タブのID)を指定する方式だと自動生成シートのgidがずれて400エラーになることがあるため、
+// シート名を直接指定できる gviz/tq エンドポイントを使用しています。
+// タブ名を変更した場合は、下記URLの sheet= の後ろ(URLエンコードされたシート名)を書き換えてください。
+const WORDPOOL_CSV_URL = "https://docs.google.com/spreadsheets/d/1mgzikHSxEAivSlJLSyKNqhPov6lxJ3C78TdOpBKPSl4/gviz/tq?tqx=out:csv&sheet=" + encodeURIComponent("フォームの回答 1");
 
 // シンプルなCSVパーサ(ダブルクォート囲み・エスケープに対応)
 function parseCSV(text){
@@ -390,32 +387,6 @@ async function loadWordPool(){
     console.warn("ワードプールの取得に失敗したため、デフォルトのワードプールを使用します。", e);
   }
 }
-const FLAVOR = [
-  "グラスの底に映る月を、ひとり見つめている。",
-  "誰も知らない扉の奥に、住処がある。",
-  "注文するのはいつも「いつもの」。",
-  "時計の針よりゆっくり生きている。",
-  "バーテンダーだけが知っている顔がある。",
-  "氷が溶ける速さで、本音がにじむ。",
-  "名刺には書かれない肩書きを持っている。",
-  "煙草の煙のように、掴みどころがない。",
-  "最後の一杯を、いつも一人で飲み干す。",
-  "看板の灯が消えても、まだそこにいる。",
-  "誰かの噂話には、決して加わらない。",
-  "カウンターの端が、指定席になっている。",
-  "一度きりの出会いを、大切に数えている。",
-  "言葉より先に、視線で語る。",
-  "酔うほどに、輪郭がはっきりする。",
-  "雨の匂いがする夜に、姿を現す。",
-  "グラスを傾ける角度にまで、流儀がある。",
-  "沈黙を、最高のもてなしだと思っている。",
-  "閉店間際にしか、素顔を見せない。",
-  "誰よりも早く来て、誰よりも遅くまで残る。",
-  "店の隅の暗がりが、一番落ち着く。",
-  "数字にできない価値を、信じている。",
-  "一杯のために、一日を生きている。",
-  "約束のない夜を、こよなく愛している。"
-];
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 /* ============ イラスト(線画+色マスク合成) ============ */
@@ -458,7 +429,6 @@ function loadImage(src){
   });
 }
 
-// テクスチャ画像を使いたくなったらここに追加(現状は空 = 単色/グラデーションのみ)
 // テクスチャは textures/manifest.json に列挙されたファイル名を元に外部ファイルとして読み込む
 let TEXTURES = [];
 let TEXTURE_IMAGES = [];
@@ -493,7 +463,6 @@ function randomFillStyle(octx, w, h){
   if(roll < 0.55){
     return randomColor();
   }
-  // グラデーション(角度・色2つをランダムに決める)
   const c1 = randomColor();
   let c2 = randomColor();
   while(c2 === c1) c2 = randomColor();
@@ -524,17 +493,15 @@ async function renderIllust(){
   const w = canvas.width, h = canvas.height;
   ctx.clearRect(0,0,w,h);
 
-  if(ILLUSTRATIONS.length === 0) return; // イラスト未登録時は何も描かない
+  if(ILLUSTRATIONS.length === 0) return;
 
   const set = ILLUSTRATIONS[Math.floor(Math.random()*ILLUSTRATIONS.length)];
   const [line, mask1, mask2] = await Promise.all([set.line, set.c1, set.c2].map(loadImage));
 
-  // レイヤー順を反転: 先にcolor2、その上にcolor1を重ねる
   paintMasked(ctx, w, h, mask2);
   paintMasked(ctx, w, h, mask1);
   ctx.drawImage(line, 0, 0, w, h);
 }
-
 
 // GitHub Pagesで公開したら、実際の公開URLに書き換えてください
 const SITE_URL = "https://cceight.github.io/ultimate-mbti/";
@@ -589,7 +556,6 @@ document.getElementById('btn-retry').addEventListener('click', ()=>{
 const btnSpin = document.getElementById('btn-spin');
 btnSpin.addEventListener('click', spinAll);
 
-// ページ読み込み時にスプレッドシートからワードプールを取得(完了までボタンを一旦無効化)
 btnSpin.disabled = true;
 Promise.all([loadWordPool(), loadIllustManifest(), loadTextureManifest()])
   .finally(()=>{ btnSpin.disabled = false; });
@@ -675,19 +641,16 @@ document.getElementById('btn-save').addEventListener('click', ()=>{
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
 
-  // 背景
   const grad = ctx.createRadialGradient(W/2, 0, 50, W/2, H*0.4, H*0.9);
   grad.addColorStop(0, '#2a2119');
   grad.addColorStop(1, '#0c0a08');
   ctx.fillStyle = grad;
   ctx.fillRect(0,0,W,H);
 
-  // 外枠
   ctx.strokeStyle = 'rgba(201,161,95,0.55)';
   ctx.lineWidth = 2;
   ctx.strokeRect(40,40,W-80,H-80);
 
-  // コーナー装飾
   ctx.strokeStyle = 'rgba(201,161,95,0.9)';
   ctx.lineWidth = 3;
   const corner = 40;
@@ -699,7 +662,6 @@ document.getElementById('btn-save').addEventListener('click', ()=>{
     ctx.stroke();
   });
 
-  // コード
   ctx.textAlign = 'center';
   ctx.fillStyle = '#c9a15f';
   ctx.font = 'bold 130px Georgia, serif';
@@ -708,7 +670,6 @@ document.getElementById('btn-save').addEventListener('click', ()=>{
   ctx.fillText(code, W/2, H/2-10);
   ctx.shadowBlur = 0;
 
-  // 形容詞・名詞
   ctx.fillStyle = '#e9e0c8';
   ctx.font = '48px "Hiragino Mincho ProN","Yu Mincho",serif';
   ctx.fillText(`${adj} ${noun}`, W/2, H/2+110);
@@ -718,23 +679,6 @@ document.getElementById('btn-save').addEventListener('click', ()=>{
   link.href = canvas.toDataURL('image/png');
   link.click();
 });
-
-function wrapText(ctx, text, x, y, maxWidth, lineHeight){
-  const chars = text.split('');
-  let line = '';
-  let lines = [];
-  chars.forEach(ch=>{
-    const test = line + ch;
-    if(ctx.measureText(test).width > maxWidth && line !== ''){
-      lines.push(line);
-      line = ch;
-    } else {
-      line = test;
-    }
-  });
-  lines.push(line);
-  lines.forEach((l,i)=> ctx.fillText(l, x, y + i*lineHeight));
-}
 
 /* ============ 埃の粒子 ============ */
 (function initDust(){
