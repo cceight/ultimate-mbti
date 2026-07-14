@@ -319,13 +319,13 @@
   </footer>
 </div>
 
-<canvas id="share-canvas" width="1000" height="650" style="display:none;"></canvas>
+<canvas id="share-canvas" width="1000" height="850" style="display:none;"></canvas>
 
 <script>
 /* ============ データ ============ */
 // デフォルト(スプレッドシート取得に失敗した場合のフォールバック)
-let ADJ = ["最強の","素早い","究極の"];
-let NOUN = ["トンボ","タマムシ","ゲジゲジ"];
+let ADJ = ["孤高な","憂鬱な","妖艶な","寡黙な","放浪の","酩酊の","深夜の","一匹狼の","気まぐれな","謎めいた","退廃的な","優雅な","無頼な","感傷的な","冷徹な","情熱的な","世捨て人の","夜更かしの","苦味走った","甘美な","破滅的な","陽気な","皮肉屋の","浮世離れした","一期一会の","名もなき","影のある","気高き","酔狂な","不器用な","自由奔放な","神出鬼没の"];
+let NOUN = ["夜霧","一杯のジン","灯火","密偵","吟遊詩人","梟","黒猫","常連客","バーテンダー","迷い酒","月光","氷塊","燻製香","流れ者","秘密結社員","蝶","亡霊","錬金術師","カウンターの隅","万年筆","古時計","蜃気楼","一輪の薔薇","深夜ラジオ","密造酒","賭博師","旅人","探偵","影法師","ジャズの調べ","迷宮","星屑"];
 
 // Googleスプレッドシート「フォームの回答 1」シートをCSVで取得(B列=形容詞, C列=名詞)
 // gid(タブのID)を指定する方式だと自動生成シートのgidがずれて400エラーになることがあるため、
@@ -371,7 +371,7 @@ async function loadWordPool(){
     const newAdj = [];
     const newNoun = [];
     // 1行目はヘッダー(タイムスタンプ/形容詞/名詞)なのでスキップ、B列・C列を使用
-for(let i=1;i<rows.length;i++){
+    for(let i=1;i<rows.length;i++){
       const adj = (rows[i][1] || "").trim();
       const noun = (rows[i][2] || "").trim();
       if(adj) newAdj.push(adj);
@@ -618,7 +618,7 @@ function revealResult(code){
 document.getElementById('btn-share').addEventListener('click', ()=>{
   if(!window.__last) return;
   const {code, adj, noun} = window.__last;
-  const text = `可能性は1100万通り以上！本当のMBTI診断で「${adj} ${noun}」(${code})が出ました。`;
+  const text = `深夜の性格診断で「${adj} ${noun}」(${code})が出ました。`;
   const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SITE_URL)}`;
   window.open(tweetUrl, '_blank', 'noopener');
 });
@@ -626,7 +626,7 @@ document.getElementById('btn-share').addEventListener('click', ()=>{
 document.getElementById('btn-share-bsky').addEventListener('click', ()=>{
   if(!window.__last) return;
   const {code, adj, noun} = window.__last;
-  const text = `可能性は1100万通り以上！本当のMBTI診断で「${adj} ${noun}」(${code})が出ました。 ${SITE_URL}`;
+  const text = `深夜の性格診断で「${adj} ${noun}」(${code})が出ました。 ${SITE_URL}`;
   const bskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text)}`;
   window.open(bskyUrl, '_blank', 'noopener');
 });
@@ -639,16 +639,19 @@ document.getElementById('btn-save').addEventListener('click', ()=>{
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
 
+  // 背景
   const grad = ctx.createRadialGradient(W/2, 0, 50, W/2, H*0.4, H*0.9);
   grad.addColorStop(0, '#2a2119');
   grad.addColorStop(1, '#0c0a08');
   ctx.fillStyle = grad;
   ctx.fillRect(0,0,W,H);
 
+  // 外枠
   ctx.strokeStyle = 'rgba(201,161,95,0.55)';
   ctx.lineWidth = 2;
   ctx.strokeRect(40,40,W-80,H-80);
 
+  // コーナー装飾
   ctx.strokeStyle = 'rgba(201,161,95,0.9)';
   ctx.lineWidth = 3;
   const corner = 40;
@@ -660,17 +663,31 @@ document.getElementById('btn-save').addEventListener('click', ()=>{
     ctx.stroke();
   });
 
+  // イラスト(結果画面に描画済みのcanvasをそのまま流用)
+  const illustCanvas = document.getElementById('illust-canvas');
+  const illustSize = 380;
+  const illustX = W/2 - illustSize/2;
+  const illustY = 90;
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.5)';
+  ctx.shadowBlur = 24;
+  ctx.shadowOffsetY = 10;
+  ctx.drawImage(illustCanvas, illustX, illustY, illustSize, illustSize);
+  ctx.restore();
+
+  // コード
   ctx.textAlign = 'center';
   ctx.fillStyle = '#c9a15f';
-  ctx.font = 'bold 130px Georgia, serif';
+  ctx.font = 'bold 110px Georgia, serif';
   ctx.shadowColor = 'rgba(201,161,95,0.5)';
   ctx.shadowBlur = 30;
-  ctx.fillText(code, W/2, H/2-10);
+  ctx.fillText(code, W/2, illustY + illustSize + 130);
   ctx.shadowBlur = 0;
 
+  // 形容詞・名詞
   ctx.fillStyle = '#e9e0c8';
-  ctx.font = '48px "Hiragino Mincho ProN","Yu Mincho",serif';
-  ctx.fillText(`${adj} ${noun}`, W/2, H/2+110);
+  ctx.font = '44px "Hiragino Mincho ProN","Yu Mincho",serif';
+  ctx.fillText(`${adj} ${noun}`, W/2, illustY + illustSize + 220);
 
   const link = document.createElement('a');
   link.download = `ultimate-mbti-${code}.png`;
