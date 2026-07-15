@@ -620,7 +620,7 @@ document.getElementById('btn-share').addEventListener('click', ()=>{
   const {code, adj, noun} = window.__last;
   const text = `私は
   
-「${adj} ${noun}」(${code})
+(${code})「${adj}${noun}」
   
 です。 可能性は1100万通り以上！究極のMBTI診断で本当の自分を見つけましょう。
 #UltimateMBTI`;
@@ -633,7 +633,7 @@ document.getElementById('btn-share-bsky').addEventListener('click', ()=>{
   const {code, adj, noun} = window.__last;
   const text = `私は
 
-「${adj} ${noun}」(${code})
+(${code})「${adj}${noun}」
   
 です。
 可能性は1100万通り以上！究極のMBTI診断で本当の自分を見つけましょう。
@@ -698,7 +698,7 @@ document.getElementById('btn-save').addEventListener('click', ()=>{
   // 形容詞・名詞
   ctx.fillStyle = '#e9e0c8';
   ctx.font = '44px "Hiragino Mincho ProN","Yu Mincho",serif';
-  ctx.fillText(`${adj} ${noun}`, W/2, illustY + illustSize + 220);
+  ctx.fillText(`${adj}${noun}`, W/2, illustY + illustSize + 220);
 
   const link = document.createElement('a');
   link.download = `ultimate-mbti-${code}.png`;
