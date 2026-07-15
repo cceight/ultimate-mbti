@@ -620,10 +620,10 @@ document.getElementById('btn-share').addEventListener('click', ()=>{
   const {code, adj, noun} = window.__last;
   const text = `私は
   
-  「${adj} ${noun}」(${code})
+「${adj} ${noun}」(${code})
   
-  です。 可能性は1100万通り以上！究極のMBTI診断で本当の自分を見つけましょう。
-  #UltimateMBTI`;
+です。 可能性は1100万通り以上！究極のMBTI診断で本当の自分を見つけましょう。
+#UltimateMBTI`;
   const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(SITE_URL)}`;
   window.open(tweetUrl, '_blank', 'noopener');
 });
@@ -632,12 +632,12 @@ document.getElementById('btn-share-bsky').addEventListener('click', ()=>{
   if(!window.__last) return;
   const {code, adj, noun} = window.__last;
   const text = `私は
+
+「${adj} ${noun}」(${code})
   
-  「${adj} ${noun}」(${code})
-  
-  です。
-  可能性は1100万通り以上！究極のMBTI診断で本当の自分を見つけましょう。
-  #UltimateMBTI ${SITE_URL}`;
+です。
+可能性は1100万通り以上！究極のMBTI診断で本当の自分を見つけましょう。
+#UltimateMBTI ${SITE_URL}`;
   const bskyUrl = `https://bsky.app/intent/compose?text=${encodeURIComponent(text)}`;
   window.open(bskyUrl, '_blank', 'noopener');
 });
