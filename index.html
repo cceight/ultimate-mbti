@@ -698,7 +698,7 @@ document.getElementById('btn-save').addEventListener('click', ()=>{
   // 形容詞・名詞
   ctx.fillStyle = 'rgb(70,0,0)';
   ctx.font = '44px "Hiragino Mincho ProN","Yu Mincho",serif';
-  ctx.fillText(`${adj} ${noun}`, W/2, illustY + illustSize + 220);
+  ctx.fillText(`${adj}${noun}`, W/2, illustY + illustSize + 220);
   const link = document.createElement('a');
   link.download = `ultimate-mbti-${code}.png`;
   link.href = canvas.toDataURL('image/png');
